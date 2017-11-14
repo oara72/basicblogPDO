@@ -1,7 +1,8 @@
-<?php require('includes/config.php');
+<?php
+require('includes/config.php');
 
-$stmt = $db->prepare('SELECT postID, postTitle, postCont, postDate FROM blog_posts WHERE postID = :postID');
-$stmt->execute(array(':postID' => $_GET['id']));
+$stmt = $db->prepare('SELECT postID, postTitle, postSlug, postCont, postDate FROM blog_posts WHERE postSlug = :postSlug');
+$stmt->execute(array(':postSlug' => $_GET['id']));
 $row = $stmt->fetch();
 
 //if post does not exists redirect user.
@@ -27,8 +28,7 @@ if($row['postID'] == ''){
     <hr />
     <p><a href="./">Blog Index</a></p>
 
-
-    <?php
+<?php
     echo '<div>';
     echo '<h1>'.$row['postTitle'].'</h1>';
     echo '<p>Posted on '.date('jS M Y', strtotime($row['postDate'])).'</p>';

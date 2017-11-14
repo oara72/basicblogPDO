@@ -20,14 +20,14 @@
     <?php
     try {
 
-        $stmt = $db->query('SELECT postID, postTitle, postDesc, postDate FROM blog_posts ORDER BY postID DESC');
+        $stmt = $db->query('SELECT postID, postTitle, postSlug, postDesc, postDate FROM blog_posts ORDER BY postID DESC');
         while($row = $stmt->fetch()){
 
             echo '<div>';
-            echo '<h1><a href="viewpost.php?id='.$row['postID'].'">'.$row['postTitle'].'</a></h1>';
+            echo '<h1><a href="'.$row['postSlug'].'">'.$row['postTitle'].'</a></h1>';
             echo '<p>Posted on '.date('jS M Y H:i:s', strtotime($row['postDate'])).'</p>';
             echo '<p>'.$row['postDesc'].'</p>';
-            echo '<p><a href="viewpost.php?id='.$row['postID'].'">Read More</a></p>';
+            echo '<p><a href="'.$row['postSlug'].'">Read More</a></p>';
             echo '</div>';
 
         }
@@ -36,7 +36,6 @@
         echo $e->getMessage();
     }
     ?>
-
 </div>
 
 
