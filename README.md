@@ -1,2 +1,2 @@
 # basicblogPDO
-Como construir un blog Básico en PDO desde 0.
+en este branch se adecua la busqueda de articulos usando el titulo en vez del id.
