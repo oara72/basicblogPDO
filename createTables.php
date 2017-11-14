@@ -36,7 +36,7 @@ array_push($queryArray, $query);
 
 // insert administrador
 
-$query="INSERT INTO blog_members VALUES('0','user', 'password', 'rodriguezarrocha@gmail.com', '', '1')";
+$query="INSERT INTO blog_members VALUES('0','user', 'password', 'info@gmail.com', '', '1')";
 array_push($queryArray, $query);
 
 //Use a foreach looping structure to iterate over the array of queries
