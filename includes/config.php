@@ -4,9 +4,9 @@ session_start();
 
 //database credentials
 define('DBHOST','localhost');
-define('DBUSER','user');
-define('DBPASS','password');
-define('DBNAME','blogpdo');
+define('DBUSER','root');
+define('DBPASS','Alex@1972');
+define('DBNAME','0liver507db');
 
 $db = new PDO("mysql:host=".DBHOST.";dbname=".DBNAME, DBUSER, DBPASS);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -19,8 +19,7 @@ date_default_timezone_set("America/Toronto");
 function __autoload($class) {
 
     $class = strtolower($class);
-
-    //if call from within /assets adjust the path
+    //if call from within assets adjust the path
     $classpath = 'classes/class.'.$class . '.php';
     if ( file_exists($classpath)) {
         require_once $classpath;
@@ -39,6 +38,6 @@ function __autoload($class) {
     }
 
 }
-
 $user = new User($db);
+include('functions.php');
 ?>

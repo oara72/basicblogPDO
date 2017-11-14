@@ -2,7 +2,7 @@
 require_once('../includes/config.php');
 
 //if not logged in redirect to login page
-if(!$user->is_logged_in()){ header('Location: login.php'); }
+//if(!$user->is_logged_in()){ header('Location: login.php'); }
 ?>
 <!doctype html>
 <html lang="en">
@@ -58,16 +58,48 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 
         if(!isset($error)){
 
+//            try {
+//
+//                //insert into database
+//                $stmt = $db->prepare('INSERT INTO blog_posts (postTitle,postDesc,postCont,postDate) VALUES (:postTitle, :postDesc, :postCont, :postDate)') ;
+//                $stmt->execute(array(
+//                    ':postTitle' => $postTitle,
+//                    ':postDesc' => $postDesc,
+//                    ':postCont' => $postCont,
+//                    ':postDate' => date('Y-m-d H:i:s')
+//                ));
+//
+//                //redirect to index page
+//                header('Location: index.php?action=added');
+//                exit;
+//
+//            }
+
             try {
 
+                $postSlug = slug($postTitle);
+
                 //insert into database
-                $stmt = $db->prepare('INSERT INTO blog_posts (postTitle,postDesc,postCont,postDate) VALUES (:postTitle, :postDesc, :postCont, :postDate)') ;
+                $stmt = $db->prepare('INSERT INTO blog_posts (postTitle,postSlug,postDesc,postCont,postDate) VALUES (:postTitle, :postSlug, :postDesc, :postCont, :postDate)') ;
                 $stmt->execute(array(
                     ':postTitle' => $postTitle,
+                    ':postSlug' => $postSlug,
                     ':postDesc' => $postDesc,
                     ':postCont' => $postCont,
                     ':postDate' => date('Y-m-d H:i:s')
                 ));
+
+                $postID = $db->lastInsertId();
+                //add categories
+                if(is_array($catID)){
+                    foreach($_POST['catID'] as $catID){
+                        $stmt = $db->prepare('INSERT INTO blog_post_cats (postID,catID)VALUES(:postID,:catID)');
+                        $stmt->execute(array(
+                            ':postID' => $postID,
+                            ':catID' => $catID
+                        ));
+                    }
+                }
 
                 //redirect to index page
                 header('Location: index.php?action=added');
@@ -99,6 +131,27 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 
         <p><label>Content</label><br />
             <textarea name='postCont' cols='60' rows='10'><?php if(isset($error)){ echo $_POST['postCont'];}?></textarea></p>
+
+        <fieldset>
+            <legend>Categories</legend>
+
+            <?php
+            $stmt2 = $db->query('SELECT catID, catTitle FROM blog_cats ORDER BY catTitle');
+            while($row2 = $stmt2->fetch()){
+                if(isset($_POST['catID'])){
+
+                    $checked = null;
+                    if(in_array($row2['catID'], $_POST['catID'])){
+                        $checked="checked='checked'";
+                    }else{
+                        $checked = null;
+                    }
+                }
+                echo "<input type='checkbox' name='catID[]' value='".$row2['catID']."' $checked> ".$row2['catTitle']."<br />";
+            }
+            ?>
+
+        </fieldset>
 
         <p><input type='submit' name='submit' value='Submit'></p>
 
