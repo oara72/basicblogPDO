@@ -1,12 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: macpro
- * Date: 11/14/17
- * Time: 5:24 PM
- */
-
-//include config
+<?php //include config
 require_once('../includes/config.php');
 //if not logged in redirect to login page
 if(!$user->is_logged_in()){ header('Location: login.php'); }

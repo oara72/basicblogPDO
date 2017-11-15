@@ -1,8 +1,7 @@
 <?php //include config
 require_once('../includes/config.php');
-
 //if not logged in redirect to login page
-//if(!$user->is_logged_in()){ header('Location: login.php'); }
+if(!$user->is_logged_in()){ header('Location: login.php'); }
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,47 +33,24 @@ require_once('../includes/config.php');
     <h2>Add Post</h2>
 
     <?php
-
     //if form has been submitted process it
     if(isset($_POST['submit'])){
-
-        $_POST = array_map( 'stripslashes', $_POST );
+        //$_POST = array_map( 'stripslashes', $_POST );
 
         //collect form data
         extract($_POST);
-
         //very basic validation
         if($postTitle ==''){
             $error[] = 'Please enter the title.';
         }
-
         if($postDesc ==''){
             $error[] = 'Please enter the description.';
         }
-
         if($postCont ==''){
             $error[] = 'Please enter the content.';
         }
 
         if(!isset($error)){
-
-//            try {
-//
-//                //insert into database
-//                $stmt = $db->prepare('INSERT INTO blog_posts (postTitle,postDesc,postCont,postDate) VALUES (:postTitle, :postDesc, :postCont, :postDate)') ;
-//                $stmt->execute(array(
-//                    ':postTitle' => $postTitle,
-//                    ':postDesc' => $postDesc,
-//                    ':postCont' => $postCont,
-//                    ':postDate' => date('Y-m-d H:i:s')
-//                ));
-//
-//                //redirect to index page
-//                header('Location: index.php?action=added');
-//                exit;
-//
-//            }
-
             try {
 
                 $postSlug = slug($postTitle);
@@ -90,6 +66,7 @@ require_once('../includes/config.php');
                 ));
 
                 $postID = $db->lastInsertId();
+
                 //add categories
                 if(is_array($catID)){
                     foreach($_POST['catID'] as $catID){
@@ -100,19 +77,14 @@ require_once('../includes/config.php');
                         ));
                     }
                 }
-
                 //redirect to index page
                 header('Location: index.php?action=added');
                 exit;
-
             } catch(PDOException $e) {
                 echo $e->getMessage();
             }
-
         }
-
     }
-
     //check for any errors
     if(isset($error)){
         foreach($error as $error){
@@ -127,7 +99,7 @@ require_once('../includes/config.php');
             <input type='text' name='postTitle' value='<?php if(isset($error)){ echo $_POST['postTitle'];}?>'></p>
 
         <p><label>Description</label><br />
-            <textarea name='postDesc' cols='60' rows='1'><?php if(isset($error)){ echo $_POST['postDesc'];}?></textarea></p>
+            <textarea name='postDesc' cols='60' rows='10'><?php if(isset($error)){ echo $_POST['postDesc'];}?></textarea></p>
 
         <p><label>Content</label><br />
             <textarea name='postCont' cols='60' rows='10'><?php if(isset($error)){ echo $_POST['postCont'];}?></textarea></p>
@@ -136,18 +108,19 @@ require_once('../includes/config.php');
             <legend>Categories</legend>
 
             <?php
+            $checked = null;
             $stmt2 = $db->query('SELECT catID, catTitle FROM blog_cats ORDER BY catTitle');
             while($row2 = $stmt2->fetch()){
-                if(isset($_POST['catID'])){
 
-                    $checked = null;
+                if(isset($_POST['catID'])){
                     if(in_array($row2['catID'], $_POST['catID'])){
                         $checked="checked='checked'";
                     }else{
                         $checked = null;
                     }
                 }
-                echo "<input type='checkbox' name='catID[]' value='".$row2['catID']."' $checked> ".$row2['catTitle']."<br />";
+                echo "<input type='checkbox' name='catID[]' value= ' ".$row2['catID']." '  $checked> ".$row2['catTitle']." <br />";
+
             }
             ?>
 

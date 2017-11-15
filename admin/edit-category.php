@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: macpro
- * Date: 11/14/17
- * Time: 5:25 PM
- */
-
 //include config
 require_once('../includes/config.php');
 //if not logged in redirect to login page
@@ -32,7 +25,7 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
     <?php
     //if form has been submitted process it
     if(isset($_POST['submit'])){
-        $_POST = array_map( 'stripslashes', $_POST );
+        //$_POST = array_map( 'stripslashes', $_POST );
         //collect form data
         extract($_POST);
         //very basic validation

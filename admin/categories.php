@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: macpro
- * Date: 11/14/17
- * Time: 5:23 PM
- */
-
 //include config
 require_once('../includes/config.php');
 //if not logged in redirect to login page
