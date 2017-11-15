@@ -22,7 +22,16 @@
     <?php
     try {
 
-        $stmt = $db->query('SELECT postID, postTitle, postSlug, postDesc, postDate FROM blog_posts ORDER BY postID DESC');
+        //instantiate the class
+        $pages = new Paginator('1','p');
+
+        //collect all records from the next function
+        $stmt = $db->query('SELECT postID FROM blog_posts');
+
+        //pass number of records to
+        $pages->set_total($stmt->rowCount());
+
+        $stmt = $db->query('SELECT postID, postTitle, postSlug, postDesc, postDate FROM blog_posts ORDER BY postID DESC '.$pages->get_limit());
         while($row = $stmt->fetch()){
 
             echo '<div>';
@@ -51,6 +60,8 @@
             echo '</div>';
 
         }
+
+        echo $pages->page_links();
 
     } catch(PDOException $e) {
         echo $e->getMessage();
